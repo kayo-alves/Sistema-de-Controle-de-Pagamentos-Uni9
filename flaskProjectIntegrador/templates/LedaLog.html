@@ -243,6 +243,31 @@
         overflow-y: scroll;
         }
 
+        #listaDepartamento{
+        background-color: white;
+        margin: 5px;
+        text-align: left;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        padding: 30px;
+        color: black;
+        height: 250px;
+        overflow-y: scroll;
+        }
+
+        #listafuncDep{
+        background-color: white;
+        margin: 5px;
+        text-align: left;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        padding: 30px;
+        color: black;
+        height: 350px;
+        overflow-y: scroll;
+        }
 
     </style>
 
@@ -264,6 +289,10 @@
                const infoEmp = document.querySelector("#titulo_empresa");
                const listaCargos = document.querySelector("#cargos");
                const cargosdaEmpresa=  Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Cargos da empresa");
+               const departamento= document.querySelector("#departamento");
+               const departamentoDaEmpresa= Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Departamentos Da Empresa");
+               const funcionarioDepartamento= document.querySelector("#funcionarioDep");
+
 
                console.log("Parâmetros da URL:", params.toString());
 
@@ -326,6 +355,8 @@
                if (novoBtn) novoBtn.style.display = "none";
                if (infoEmp) infoEmp.style.display = "none";
                if (listaCargos) listaCargos.style.display = "none";
+               if (departamento) departamento.style.display = "none";
+               if (funcionarioDepartamento) funcionarioDepartamento.style.display = "none";
 
                // Exibir botão "Novo" ao clicar em "Cadastrar Funcionário"
                if (cadastrarFuncionarioLink) {
@@ -343,6 +374,12 @@
 
                        //Esconde os cargos
                        if (listaCargos) listaCargos.style.display = "none";
+
+                       //Esconde os departamento
+                       if (departamento) departamento.style.display = "none";
+
+                       //Escode FuncionárioDepartamento
+                       if (funcionarioDepartamento) funcionarioDepartamento.style.display = "none";
 
                        // Exibe ou esconde a lista de usuários
                        if (funcionarioLista.style.display === "none" || !funcionarioLista.style.display) {
@@ -371,6 +408,9 @@
                        if (funcionarioLista) funcionarioLista.style.display = "none";
                        if (novoBtn) novoBtn.style.display = "none";
                        if (listaCargos) listaCargos.style.display = "none";
+                       if (departamento) departamento.style.display = "none";
+                       if (funcionarioDepartamento) funcionarioDepartamento.style.display = "none";
+
                        // Exibe ou esconde as informacoes da empresa
                        // Alterna visibilidade das informações da empresa
                         if (getComputedStyle(infoEmp).display === "none") {
@@ -397,6 +437,8 @@
                        if (funcionarioLista) funcionarioLista.style.display = "none";
                        if (novoBtn) novoBtn.style.display = "none";
                        if (infoEmp) infoEmp.style.display = "none";
+                       if (departamento) departamento.style.display = "none";
+                       if (funcionarioDepartamento) funcionarioDepartamento.style.display = "none";
 
                        // Exibe ou esconde os cargos da empresa
                        // Alterna visibilidade dos cargos da empresa
@@ -406,6 +448,39 @@
                             listaCargos.style.display = "none"; // Esconde informações
                         }
 
+                   });
+               }
+
+               //exibe a tabela de departamento quando clicado em departamentos da empresa
+               if (departamentoDaEmpresa) {
+                   departamentoDaEmpresa.addEventListener("click", function (event) {
+                       event.preventDefault();
+
+                       // Esconde a mensagem de boas-vindas
+                       if (welcomeMessage) welcomeMessage.style.display = "none";
+
+                       // Esconde o bem-vindo
+                       if (bemVindoMessage) bemVindoMessage.style.display = "none";
+
+                       // Esconde outras seções
+                       if (funcionarioLista) funcionarioLista.style.display = "none";
+                       if (novoBtn) novoBtn.style.display = "none";
+                       if (infoEmp) infoEmp.style.display = "none";
+                       if (listaCargos) listaCargos.style.display = "none";
+
+                       // Exibe ou esconde os departamentos da empresa
+                       // Alterna visibilidade dos departamentos da empresa
+                        if (getComputedStyle(departamento).display === "none") {
+                            departamento.style.display = "block"; // Exibe informações
+                        } else {
+                            departamento.style.display = "none"; // Esconde informações
+                        }
+                        //Exibe ou esconde funcionario alocado em dep
+                        if (getComputedStyle(funcionarioDepartamento).display === "none") {
+                            funcionarioDepartamento.style.display = "block"; // Exibe informações
+                        } else {
+                            funcionarioDepartamento.style.display = "none"; // Esconde informações
+                        }
                    });
                }
 
@@ -461,8 +536,8 @@
                     <li class="nav-item">
                         <a class="nav-link TopicosMenu" href="#">Departamento <span>&#8744;</span></a>
                         <ul class="submenu">
-                            <li><a href="#">Diretoria</a></li>
-                            <li><a href="#">RH</a></li>
+                            <li><a href="#">Departamentos Da Empresa</a></li>
+
                         </ul>
                     </li>
                 </ul>
@@ -644,6 +719,67 @@
                             </table>
                         {% else %}
                             <h1>Não existem cargos cadastrados</h1>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="departamento">
+                    <h1>Cargos da Empresa</h1>
+                    <div id="listaDepartamento">
+                        {% if departamento %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Departamento</th>
+                                        <th>Nome</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in departamento %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>Não existem departamentos cadastrados</h1>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="funcionarioDep">
+                    <h1>Funcionários Alocados nos Departamentos</h1>
+                    <div id="listafuncDep">
+                        {% if funcionario_departamento %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Funcionário</th>
+                                        <th>Nome Funcionário</th>
+                                        <th>ID Departamento</th>
+                                        <th>Nome Departamento</th>
+                                        <th>Data de Alocação</th>
+                                        <th>Data de Saída</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in funcionario_departamento %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                            <td>{{ c[2] }}</td>
+                                            <td>{{ c[3] }}</td>
+                                            <td>{{ c[4] }}</td>
+                                            <td>{{ c[5] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>Não existem funcionarios alocados nos departamentos</h1>
                         {% endif %}
                     </div>
                 </div>

@@ -57,7 +57,21 @@ def usuario():
             cursor.execute('select c.id_cargo, c.nome, f.nome, id_funcionario, c.salario from  cargo c inner join funcionario f on c.id_cargo = f.id_cargo;')
             cargo = cursor.fetchall()
 
-        return render_template('LedaLog.html', usuarios=usuarios, empresa=empresa, cargo=cargo)
+        conect_BD = mysql.connector.connect(host='localhost', database='meu_banco', user='root', password='')
+
+        if conect_BD.is_connected():
+            cursor = conect_BD.cursor()
+            cursor.execute('select * from departamento;')
+            departamento = cursor.fetchall()
+
+        conect_BD = mysql.connector.connect(host='localhost', database='meu_banco', user='root', password='')
+
+        if conect_BD.is_connected():
+            cursor = conect_BD.cursor()
+            cursor.execute('select fd.id_funcionario, f.nome, fd.id_depart, d.nome as nome_departamento, fd.data_locacao, fd.data_saida from funcionario_departamento fd inner join funcionario f on fd.id_funcionario = f.id_funcionario inner join departamento d on d.id_depart = fd.id_depart;')
+            funcionario_departamento = cursor.fetchall()
+
+        return render_template('LedaLog.html', usuarios=usuarios, empresa=empresa, cargo=cargo, departamento=departamento, funcionario_departamento=funcionario_departamento)
     if logado == False:
         return redirect("/login")
 
