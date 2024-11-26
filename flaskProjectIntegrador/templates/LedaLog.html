@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ledalog</title>
+
+    <!-- Link para o CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ6H16u5xk8fT4pT2eHeZr2adV2C7+FOTN98pbcv7h+xjK+76fX7fy0vbQDl" crossorigin="anonymous">
+
+    <!-- Fonte Google -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+
+    <style>
+        /* Estilo básico */
+        body {
+            background-color: #f0f0f5;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Cabeçalho */
+        .container-fluid {
+            background-color: #2d3e50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .container-fluid h1 {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Menu lateral esquerdo */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 20px;
+            border-right: 1px solid #ddd;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            color: #2d3e50;
+            padding: 10px 20px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .nav-link:hover {
+            background-color: #e2e6ea;
+        }
+
+        .submenu {
+            list-style: none;
+            padding-left: 30px;
+            display: none;
+        }
+
+        .submenu.open {
+            display: block;
+        }
+
+        .submenu li a {
+            color: #555;
+            display: block;
+            padding: 5px 0;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .submenu li a:hover {
+            color: #2d3e50;
+            text-decoration: underline;
+        }
+
+        .TopicosMenu span {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .TopicosMenu.ativo span {
+            transform: rotate(180deg);
+        }
+
+        /* Conteúdo Principal */
+        main {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        main.full-width {
+            margin-left: 0;
+        }
+
+        /* Menu Lateral Direito */
+        .sidebar-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: #e9ecef;
+            color: #333;
+            padding-top: 20px;
+            border-left: 1px solid #ddd;
+            display: none;
+        }
+
+        .sidebar-right.active {
+            display: block;
+        }
+
+        /* Botão de Mostrar/Esconder Menu */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #2d3e50;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        /* Mensagem de Boas-Vindas */
+        .welcome-message {
+            text-align: center;
+            margin-top: 50px;
+            color: #000000;
+            font-size: 18px;
+        }
+
+        .welcome-message .arrow {
+            margin-top: 10px;
+            font-size: 24px;
+        }
+
+        #dynamic-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100%;
+        }
+
+        #btn-novo {
+        display: none;
+        width: 50%; /* Ocupa toda a largura disponível */
+        margin: 20px 50% 2px 16%; /* Espaço acima do botão */
+        padding: 10px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none; /* Remove a borda */
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        }
+
+        /* Botão Cancelar no menu lateral direito */
+        #btn-cancelar {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        }
+
+        #btn_cadastro {
+
+        }
+
+        #titulo {
+        backdrop-filter: blur(10px);
+        opacity: .9;
+        margin: 5% 21% 5% 5% ;
+        text-align: center;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        }
+        #listaFuncionarios{
+        background-color: white;
+        margin: 5px;
+        text-align: left;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        padding: 30px;
+        color: black;
+        height: 500px;
+        overflow-y: scroll;
+        }
+
+        #infoEmp{
+        background-color: white;
+        margin: 5px;
+        text-align: left;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        padding: 30px;
+        color: black;
+        height: 500px;
+        overflow-y: scroll;
+        }
+
+        #listaCargos{
+        background-color: white;
+        margin: 5px;
+        text-align: left;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 2px 5px 5px black;
+        padding: 30px;
+        color: black;
+        height: 500px;
+        overflow-y: scroll;
+        }
+
+
+    </style>
+
+    <script>
+           document.addEventListener("DOMContentLoaded", function() {
+               const sidebar = document.querySelector(".sidebar");
+               const mainContent = document.querySelector("main");
+               const toggleBtn = document.querySelector(".toggle-btn");
+               const sidebarRight = document.querySelector(".sidebar-right");
+               const welcomeMessage = document.querySelector(".welcome-message");
+               const novoBtn = document.querySelector("#btn-novo"); // Botão "Novo"
+               const cancelarBtn = document.querySelector("#btn-cancelar");
+               const cadastrarFuncionarioLink = document.querySelector(".nav-link.TopicosMenu[href='#']");
+               const funcionarioLista = document.querySelector("#titulo");
+               const bemVindoMessage = document.querySelector("#bemVindo");
+               const flashMessages = document.querySelectorAll(".alert");
+               const params = new URLSearchParams(window.location.search);
+               const informacoesEmpresa = Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Informações da empresa");
+               const infoEmp = document.querySelector("#titulo_empresa");
+               const listaCargos = document.querySelector("#cargos");
+               const cargosdaEmpresa=  Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Cargos da empresa");
+
+               console.log("Parâmetros da URL:", params.toString());
+
+               // Verifica se o parâmetro "aba" está presente na URL e se é 'cadastrarFuncionario'
+               if (params.get('aba') === 'cadastrarFuncionario') {
+                   console.log("Aba de cadastro de funcionário detectada.");
+                   // Esconde as mensagens de boas-vindas
+                   if (welcomeMessage) welcomeMessage.style.display = "none";
+                   if (bemVindoMessage) bemVindoMessage.style.display = "none";
+
+                   // Exibe o botão "Novo" e a lista de funcionários
+                   if (novoBtn) novoBtn.style.display = "inline-block";
+                   if (funcionarioLista) funcionarioLista.style.display = "block";
+
+                   // Ativa o menu lateral direito (se necessário)
+                   if (sidebarRight) sidebarRight.classList.add("active");
+               }
+
+               // Flash alerta de usuário cadastrado
+               flashMessages.forEach(alert => {
+                   setTimeout(() => {
+                       alert.classList.remove('show');
+                       alert.classList.add('fade');
+                   }, 5000); // 5 segundos
+               });
+
+               // Alternar exibição do menu lateral esquerdo
+               toggleBtn.addEventListener("click", function () {
+                   sidebar.classList.toggle("hidden");
+                   mainContent.classList.toggle("full-width");
+               });
+
+               // Alternar exibição dos submenus
+               const submenuTriggers = document.querySelectorAll(".TopicosMenu");
+               submenuTriggers.forEach(trigger => {
+                   trigger.addEventListener("click", function (event) {
+                       event.preventDefault();
+                       const submenu = this.nextElementSibling;
+
+                       // Fecha os outros submenus abertos
+                       document.querySelectorAll(".submenu.open").forEach(openSubmenu => {
+                           if (openSubmenu !== submenu) openSubmenu.classList.remove("open");
+                       });
+
+                       // Alterna a visibilidade do submenu clicado
+                       submenu.classList.toggle("open");
+                       this.classList.toggle("ativo");
+                   });
+               });
+
+               // Fechar menu lateral direito ao clicar em "Cancelar"
+               if (cancelarBtn) {
+                   cancelarBtn.addEventListener("click", function () {
+                       if (sidebarRight) sidebarRight.classList.remove("active");
+                   });
+               }
+
+               // Inicialmente, esconde a lista, botão "Novo" , informações da empresa, cargos da empresa
+               if (funcionarioLista) funcionarioLista.style.display = "none";
+               if (novoBtn) novoBtn.style.display = "none";
+               if (infoEmp) infoEmp.style.display = "none";
+               if (listaCargos) listaCargos.style.display = "none";
+
+               // Exibir botão "Novo" ao clicar em "Cadastrar Funcionário"
+               if (cadastrarFuncionarioLink) {
+                   cadastrarFuncionarioLink.addEventListener("click", function (event) {
+                       event.preventDefault();
+
+                       // Esconde as informações da empresa
+                       if (infoEmp) infoEmp.style.display = "none";
+
+                       // Esconde a mensagem de boas-vindas
+                       if (welcomeMessage) welcomeMessage.style.display = "none";
+
+                       // Esconde o bem-vindo
+                       if (bemVindoMessage) bemVindoMessage.style.display = "none";
+
+                       //Esconde os cargos
+                       if (listaCargos) listaCargos.style.display = "none";
+
+                       // Exibe ou esconde a lista de usuários
+                       if (funcionarioLista.style.display === "none" || !funcionarioLista.style.display) {
+                           if (funcionarioLista) funcionarioLista.style.display = "block"; // Exibe a lista
+                       } else {
+                           if (funcionarioLista) funcionarioLista.style.display = "none"; // Esconde a lista
+                       }
+
+                       // Exibe o botão "Novo"
+                       if (novoBtn) novoBtn.style.display = "inline-block";
+                   });
+               }
+
+               //Ao clicar no botão informacoes empresa:
+               if (informacoesEmpresa) {
+                   informacoesEmpresa.addEventListener("click", function (event) {
+                       event.preventDefault();
+
+                       // Esconde a mensagem de boas-vindas
+                       if (welcomeMessage) welcomeMessage.style.display = "none";
+
+                       // Esconde o bem-vindo
+                       if (bemVindoMessage) bemVindoMessage.style.display = "none";
+
+                       // Esconde outras seções
+                       if (funcionarioLista) funcionarioLista.style.display = "none";
+                       if (novoBtn) novoBtn.style.display = "none";
+                       if (listaCargos) listaCargos.style.display = "none";
+                       // Exibe ou esconde as informacoes da empresa
+                       // Alterna visibilidade das informações da empresa
+                        if (getComputedStyle(infoEmp).display === "none") {
+                            infoEmp.style.display = "block"; // Exibe informações
+                        } else {
+                            infoEmp.style.display = "none"; // Esconde informações
+                        }
+
+                   });
+               }
+
+               //exibe a tabela de cargo quando clicado em cargos da empresa
+               if (cargosdaEmpresa) {
+                   cargosdaEmpresa.addEventListener("click", function (event) {
+                       event.preventDefault();
+
+                       // Esconde a mensagem de boas-vindas
+                       if (welcomeMessage) welcomeMessage.style.display = "none";
+
+                       // Esconde o bem-vindo
+                       if (bemVindoMessage) bemVindoMessage.style.display = "none";
+
+                       // Esconde outras seções
+                       if (funcionarioLista) funcionarioLista.style.display = "none";
+                       if (novoBtn) novoBtn.style.display = "none";
+                       if (infoEmp) infoEmp.style.display = "none";
+
+                       // Exibe ou esconde os cargos da empresa
+                       // Alterna visibilidade dos cargos da empresa
+                        if (getComputedStyle(listaCargos).display === "none") {
+                            listaCargos.style.display = "block"; // Exibe informações
+                        } else {
+                            listaCargos.style.display = "none"; // Esconde informações
+                        }
+
+                   });
+               }
+
+               // Exibir menu lateral direito quando clicar no botão Novo
+               if (novoBtn) {
+                   novoBtn.addEventListener("click", function () {
+                       if (sidebarRight) sidebarRight.classList.add("active");
+                   });
+               }
+           });
+
+    </script>
+</head>
+
+<body>
+    <!-- Botão de Mostrar/Esconder Menu -->
+    <div class="toggle-btn">☰ Menu</div>
+
+    <!-- Cabeçalho -->
+    <div class="container-fluid">
+        <h1>LedaLog - A Melhor Empresa de Logística do Brasil!</h1>
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Menu Lateral -->
+            <nav class="sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link TopicosMenu" href="#">Cadastro de Funcionário <span>&#8744;</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link TopicosMenu" href="#">Pagamentos <span>&#8744;</span></a>
+                        <ul class="submenu">
+                            <li><a href="#">Folha de pagamento</a></li>
+                            <li><a href="#">Aumento</a></li>
+                            <li><a href="#">Descontos</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link TopicosMenu" href="#">Empresa <span>&#8744;</span></a>
+                        <ul class="submenu">
+                            <li><a href="#">Informações da empresa</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link TopicosMenu" href="#">Cargos <span>&#8744;</span></a>
+                        <ul class="submenu">
+                            <li><a href="#">Cargos da empresa</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link TopicosMenu" href="#">Departamento <span>&#8744;</span></a>
+                        <ul class="submenu">
+                            <li><a href="#">Diretoria</a></li>
+                            <li><a href="#">RH</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+    <div>
+    <!-- Menu Lateral Direito para Cadastro de Funcionário -->
+    <form id="formCadastroFuncionario" action="/cadastrarFuncionario" method="POST">
+        <nav class="sidebar-right">
+            <h3 class="text-center">Cadastrar Funcionário</h3>
+            <ul class="nav flex-column px-3">
+                <label for="nome"> NOME </label>
+                <input type="text" name="nome" id="nome" required placeholder="Digite o nome do funcionário"><br><br>
+
+                <label for="CPF"> CPF </label><br>
+                <input type="text" name="CPF" id="CPF" required placeholder="Digite o CPF"><br><br>
+
+                <label for="endereco"> Endereço </label>
+                <input type="text" name="endereco" id="endereco" required placeholder="Digite o endereço"><br><br>
+
+                <label for="dt_contratacao"> Data de Contratação </label>
+                <input type="date" name="dt_contratacao" id="dt_contratacao" required placeholder="Data de contratação"><br><br>
+
+                <label for="id_cargo"> ID Cargo </label>
+                <input type="text" name="id_cargo" id="id_cargo" required placeholder="Digite o ID do Cargo deste funcionário"><br><br>
+
+                <label for="id_empresa"> ID Empresa </label>
+                <input type="text" name="id_empresa" id="id_empresa" required placeholder="Digite o ID da empresa"><br><br>
+            </ul>
+            <button type="submit" id="btn_cadastro">Cadastrar</button>
+            <button id="btn-cancelar" class="btn btn-secondary mt-auto">Cancelar</button>
+        </nav>
+    </form>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Verifica se o botão "Novo" existe antes de adicionar o evento
+    const btnNovoFuncionario = document.getElementById('btn-novo');
+    if (btnNovoFuncionario) {
+        // Adiciona o evento de clique ao botão "Novo"
+        btnNovoFuncionario.addEventListener('click', function () {
+            const sidebarRight = document.getElementById('sidebar-right');
+            if (sidebarRight) {
+                sidebarRight.style.display = 'block'; // Exibe o painel de cadastro
+            }
+        });
+
+        // Exibe o botão "Novo" e a lista de funcionários quando o parâmetro "aba=cadastrarFuncionario" estiver na URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('aba') === 'cadastrarFuncionario') {
+            // Exibe o botão "Novo" e a lista de funcionários
+            btnNovoFuncionario.style.display = "inline-block"; // Certifique-se de que o botão é visível
+            const funcionarioLista = document.getElementById('titulo');
+            if (funcionarioLista) funcionarioLista.style.display = "block"; // Exibe a lista
+        }
+    }
+
+    // Submissão do formulário
+    const formCadastroFuncionario = document.getElementById('formCadastroFuncionario');
+    if (formCadastroFuncionario) {
+        formCadastroFuncionario.addEventListener('submit', function (event) {
+            // Coloque a lógica de submissão do formulário aqui, se necessário
+        });
+    }
+});
+
+
+</script>
+
+
+            <!-- Conteúdo Principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <div id="bemVindo">
+                    <h2>Bem-vindo ao Sistema da LedaLog</h2>
+                    <p>Explore as opções do menu para acessar as funcionalidades da nossa plataforma de logística.</p>
+                </div>
+
+                <div id="flashMessage" class="container mt-3">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+
+                <!-- Contêiner dinâmico -->
+                <div id="dynamic-content" class="mt-4">
+                    <button id="btn-novo" class="btn btn-primary">Novo</button>
+                </div>
+
+                <div id="titulo">
+                    <h1>Funcionários Cadastrados</h1>
+                    <div id="listaFuncionarios">
+                        {% if usuarios %}
+                            {% for c in usuarios %}
+                            <form action="/excluirFuncionario" method="post">
+                                <ul>
+                                    <input type="hidden" name="usuarioExcluir" value="{{c[0]}}">
+
+                                    <li>Nome: {{c[1]}}</li><br>
+                                    <li>ID Cargo: {{c[5]}}</li>
+                                </ul>
+                                <button type="submit">Excluir</button>
+                            </form>
+                                ---------------------------------------------
+                            {% endfor %}
+                        {% else %}
+                            <h1>Não existem usuários cadastrados</h1>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="titulo_empresa">
+                    <h1>Informações da Empresa</h1>
+                    <div id="infoEmp">
+                        {% if empresa %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Empresa</th>
+                                        <th>Nome</th>
+                                        <th>CNPJ</th>
+                                        <th>Ramo de Atuação</th>
+                                        <th>Quantidade de Funcionários</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in empresa %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                            <td>{{ c[2] }}</td>
+                                            <td>{{ c[3] }}</td>
+                                            <td>{{ c[4] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>Não existem informações da empresa cadastradas</h1>
+                        {% endif %}
+                    </div>
+                </div>
+
+                 <div id="cargos">
+                    <h1>Cargos da Empresa</h1>
+                    <div id="listaCargos">
+                        {% if cargo %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Cargo</th>
+                                        <th>Cargo</th>
+                                        <th>Nome</th>
+                                        <th>ID Funcionário</th>
+                                        <th>Salário</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in cargo %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                            <td>{{ c[2] }}</td>
+                                            <td>{{ c[3] }}</td>
+                                            <td>{{ c[4] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>Não existem cargos cadastrados</h1>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Mensagem de Boas-Vindas -->
+                <div class="welcome-message">
+                    <p>Escolha uma funcionalidade para começar.</p>
+                    <div class="arrow">←</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybR2v6Vq8Ff8t6x6jD4Lea63T/xp6C9QOrCXaRkfjf5tU5x4N" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0zP8K9Bhjp5ueYkN/Sp2u3Wr+IlzlbAnE6BzjfiJ3aRUdW7tF" crossorigin="anonymous"></script>
