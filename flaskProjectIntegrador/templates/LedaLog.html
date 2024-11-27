@@ -184,15 +184,37 @@
 
         /* Botão Cancelar no menu lateral direito */
         #btn-cancelar {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+        margin: 20px auto;
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: block;
+        }
+        #btn-cancelar {
+        background-color: #f44336;
+        color: white;
         position: absolute;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        width: 90%;
         }
 
-        #btn_cadastro {
+        #btn_cadastro{
 
+            width: 50%; /* Ocupa toda a largura disponível */
+            margin: 20px 50% 2px 60px; /* Espaço acima do botão */
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none; /* Remove a borda */
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
         }
 
         #titulo {
@@ -292,6 +314,7 @@
                const departamento= document.querySelector("#departamento");
                const departamentoDaEmpresa= Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Departamentos Da Empresa");
                const funcionarioDepartamento= document.querySelector("#funcionarioDep");
+               const folhaDePagamento=  Array.from(document.querySelectorAll(".submenu li a")).find(link => link.textContent.trim() === "Folha de pagamento");
 
 
                console.log("Parâmetros da URL:", params.toString());
@@ -483,6 +506,17 @@
                         }
                    });
                }
+
+               //Redireciona para a pagina de pagamento
+                // Verifica se o elemento foi encontrado antes de adicionar o evento
+                if (folhaDePagamento) {
+                  folhaDePagamento.addEventListener('click', function(event) {
+                    event.preventDefault(); // Evita que o link siga o comportamento padrão
+                    window.location.href = 'LedaLog/Pagamento'; // Define a nova rota
+                  });
+                } else {
+                  console.error("Link 'Folha de pagamento' não encontrado!");
+                }
 
                // Exibir menu lateral direito quando clicar no botão Novo
                if (novoBtn) {
@@ -724,7 +758,7 @@
                 </div>
 
                 <div id="departamento">
-                    <h1>Cargos da Empresa</h1>
+                    <h1>Departamentos da Empresa</h1>
                     <div id="listaDepartamento">
                         {% if departamento %}
                             <table border="1" cellspacing="0" cellpadding="5">

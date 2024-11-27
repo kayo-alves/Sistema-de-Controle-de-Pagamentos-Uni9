@@ -1,0 +1,251 @@
+<html>
+    <head>
+        <style>
+             body {
+            background-color: #2d3e50;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            }
+
+            /* Conteúdo Principal */
+            main {
+                margin-left: 300px;
+                width: 800px;
+                padding: 20px;
+                transition: margin-left 0.3s ease;
+            }
+
+            main.full-width {
+                margin-left: 0;
+            }
+
+            #listafuncPag{
+
+            background-color: white;
+            margin: 5px;
+            text-align: left;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 2px 5px 5px black;
+            padding: 30px;
+            color: black;
+            height: 350px;
+            overflow-y: scroll;
+            }
+
+            /* Menu Lateral Direito */
+        .sidebar-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: #e9ecef;
+            color: #333;
+            padding-top: 20px;
+            border-left: 1px solid #ddd;
+            display: none;
+        }
+
+        .sidebar-right.active {
+            display: block;
+        }
+
+        #btn-novo {
+        width: 50%; /* Ocupa toda a largura disponível */
+        margin: 20px 50% 2px 190px; /* Espaço acima do botão */
+        padding: 10px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none; /* Remove a borda */
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        }
+
+        /* Botão Cancelar no menu lateral direito */
+        #btn-cancelar {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+        margin: 20px auto;
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: block;
+        }
+
+        #btn-cancelar {
+        background-color: #f44336;
+        color: white;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        }
+
+        #btn_cadastro{
+
+            width: 50%; /* Ocupa toda a largura disponível */
+            margin: 20px 50% 2px 60px; /* Espaço acima do botão */
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none; /* Remove a borda */
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        </style>
+    </head>
+
+
+    <body>
+
+    <!-- Conteúdo Principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <div id="bemVindo">
+                    <h2 style="color: white; text-align: center" >Folha de pagamento LedaLog</h2>
+                    <div id="dynamic-content" class="mt-4">
+                        <button id="btn-novo" class="btn btn-primary">Registrar Pagamento</button>
+                    </div>
+                </div>
+         <div>
+    <!-- Menu Lateral Direito para Cadastro de Funcionário -->
+    <form id="formCadastroFuncionario" action="/pagamentos" method="POST">
+        <nav class="sidebar-right">
+            <h3 class="text-center">Pagamento Funcionário</h3>
+            <ul class="nav flex-column px-3">
+                <label for="ID Funcionário"> ID Funcionário </label>
+                <input type="text" name="ID Funcionário" id="ID Funcionário" required placeholder="Digite o ID do funcionário"><br><br>
+
+                <label for="Pagamento Total"> Pagamento Total </label><br>
+                <input type="text" name="Pagamento Total" id="Pagamento Total" required placeholder="Digite o pagamento total"><br><br>
+
+                <label for="Desconto"> Desconto </label>
+                <input type="text" name="Desconto" id="Desconto" required placeholder="Digite desconto em dinheiro"><br><br>
+
+                <label for="dt_pagamento"> Data de Pagamento </label>
+                <input type="date" name="dt_pagamento" id="dt_pagamento" required placeholder="Data de pagamento"><br><br>
+
+                <label for="hora_extra"> Hora Extra </label>
+                <input type="text" name="hora_extra" id="hora_extra" required placeholder="Digite a hora extra "><br><br>
+
+            </ul>
+            <button type="submit" id="btn_cadastro">Registrar</button>
+            <button id="btn-cancelar" class="btn btn-secondary mt-auto">Cancelar</button>
+        </nav>
+    </form>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebarRight = document.querySelector(".sidebar-right");
+        const novoBtn = document.querySelector("#btn-novo");
+        const cancelarBtn = document.querySelector("#btn-cancelar");
+        // Verifica se o botão "Novo" existe antes de adicionar o evento
+        const btnNovoFuncionario = document.getElementById('btn-novo');
+        if (btnNovoFuncionario) {
+            // Adiciona o evento de clique ao botão "Novo"
+            btnNovoFuncionario.addEventListener('click', function () {
+                const sidebarRight = document.getElementById('sidebar-right');
+                if (sidebarRight) {
+                    sidebarRight.style.display = 'block'; // Exibe o painel de cadastro
+                }
+            });
+        }
+
+        // Exibir menu lateral direito quando clicar no botão Novo
+               if (novoBtn) {
+                   novoBtn.addEventListener("click", function () {
+                       if (sidebarRight) sidebarRight.classList.add("active");
+                   });
+               }
+        // Fechar menu lateral direito ao clicar em "Cancelar"
+               if (cancelarBtn) {
+                   cancelarBtn.addEventListener("click", function () {
+                       if (sidebarRight) sidebarRight.classList.remove("active");
+                   });
+               }
+    });
+</script>
+
+                <div id="pagfuncionarioDep">
+                    <h1 style="color: white">Lista de Funcionários nos Departamentos</h1>
+
+                    <!-- Controlando a visibilidade da lista -->
+                    <div id="listafuncPag">
+                        {% if listapagamento %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Funcionário</th>
+                                        <th>Nome Funcionário</th>
+                                        <th>Salário</th>
+                                        <th>ID Cargo</th>
+                                        <th>Nome Cargo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in listapagamento %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                            <td>{{ c[2] }}</td>
+                                            <td>{{ c[3] }}</td>
+                                            <td>{{ c[4] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1 style="color: white">Não existe funcionário com este ID</h1>
+                        {% endif %}
+                    </div>
+</div>
+
+
+
+            <!--    <div id="departamento">
+                    <h1>Departamentos da Empresa</h1>
+                    <div id="listaDepartamento">
+                        {% if departamento %}
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>ID Departamento</th>
+                                        <th>Nome</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in departamento %}
+                                        <tr>
+                                            <td>{{ c[0] }}</td>
+                                            <td>{{ c[1] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>Não existem departamentos cadastrados</h1>
+                        {% endif %}
+                    </div>
+                </div> -->
+
+            </main>
+        </div>
+    </div>
+
+    </body>
+
+
+</html>
