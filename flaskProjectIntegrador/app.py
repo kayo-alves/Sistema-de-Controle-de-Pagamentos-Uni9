@@ -90,8 +90,14 @@ def pagamento():
             cursor.execute('select f.id_funcionario, f.nome, c.salario, c.id_cargo, c.nome as nome_cargo from funcionario f inner join cargo c on f.id_cargo = c.id_cargo order by f.id_funcionario;')
             listapagamento = cursor.fetchall()
 
+        conect_BD = mysql.connector.connect(host='localhost', database='meu_banco', user='root', password='')
 
-        return render_template('Pagamentos.html', listapagamento=listapagamento)
+        if conect_BD.is_connected():
+            cursor = conect_BD.cursor()
+            cursor.execute('select * from pagamento;')
+            pagamento = cursor.fetchall()
+
+        return render_template('Pagamentos.html', listapagamento=listapagamento, pagamento=pagamento)
     if logado == False:
         return redirect("/login")
 @app.route('/cadastrarFuncionario', methods=['POST', 'GET'])

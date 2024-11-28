@@ -36,6 +36,19 @@
             overflow-y: scroll;
             }
 
+            #historicoPagamento{
+                background-color: white;
+            margin: 5px;
+            text-align: left;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 2px 5px 5px black;
+            padding: 30px;
+            color: black;
+            height: 350px;
+            overflow-y: scroll;
+            }
+
             /* Menu Lateral Direito */
         .sidebar-right {
             position: fixed;
@@ -214,23 +227,30 @@
 
 
 
-            <!--    <div id="departamento">
-                    <h1>Departamentos da Empresa</h1>
-                    <div id="listaDepartamento">
-                        {% if departamento %}
+              <div id="pagamento">
+                    <h1 style="color: white">Histórico de pagamento</h1>
+                    <div id="historicoPagamento">
+                        {% if pagamento %}
                             <table border="1" cellspacing="0" cellpadding="5">
                                 <thead>
                                     <tr>
-                                        <th>ID Departamento</th>
-                                        <th>Nome</th>
-
+                                        <th>ID pagamento</th>
+                                        <th>Hora Extra</th>
+                                        <th>Data de pagamento</th>
+                                        <th>Pagamento Total</th>
+                                        <th>Id Funcionario</th>
+                                        <th>Desconto</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for c in departamento %}
+                                    {% for c in pagamento %}
                                         <tr>
                                             <td>{{ c[0] }}</td>
                                             <td>{{ c[1] }}</td>
+                                            <td>{{ c[2] }}</td>
+                                            <td>{{ c[3] }}</td>
+                                            <td>{{ c[4] }}</td>
+                                            <td>{{ c[5] }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
