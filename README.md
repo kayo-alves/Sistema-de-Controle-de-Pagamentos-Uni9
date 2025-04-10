@@ -1,7 +1,5 @@
-<h1>Sistema de Controle de Pagamentos</h1>
-<h2>Projeto Acadêmico</h2>
-<h3>2º S - Ciências da Computação, UNINOVE</h3>
-
+<h1>Projeto Acadêmico</h1>
+<h2>Sistema de Controle de Pagamentos | 2º S - Ciências da Computação, UNINOVE</h2>
 
 O Sistema de Controle de Pagamentos (SCP) foi um projeto acadêmico que desenvolvi junto a outros quatro estudantes do 2º semestre de Ciências da Computação. 
 
